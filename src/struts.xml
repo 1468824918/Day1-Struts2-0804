@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <!--
+        name:指定包名
+        extends:属性必须指定
+    -->
+    <package name="users" extends="struts-default">
+
+
+        <!--
+            指定默认类
+            如果某个action没有指定class属性
+            那么默认链接到该类
+        -->
+        <default-class-ref class="com.lanou.action.HelloAction"/>
+
+        <!--
+            action:代表一个访问的动作 或者 代表一个请求的动作
+            name: 属性指的是请求时的具体资源地址
+            class:指定该请求所对应的类
+            method:指定该类中调用的方法,默认执行execute方法
+        -->
+        <action name="hello"
+                method="hello">
+            <!--
+                result:代表请求的结果,也就是响应
+            -->
+            <result name="success">/hello.jsp</result>
+        </action>
+
+        <!--<action name="login"-->
+                <!--method="login">-->
+            <!--<result name="success">login.jsp</result>-->
+        <!--</action>-->
+
+        <!--<action name="register"-->
+                <!--method="register">-->
+            <!--<result name="success">register.jsp</result>-->
+        <!--</action>-->
+
+        <!--<action name="error"-->
+                <!--method="error">-->
+            <!--<result name="success">error.jsp</result>-->
+        <!--</action>-->
+
+
+
+
+        <!--
+            通配符
+            在action的name属性中使用*来代表通配符
+            就相当于在声明变量,当然可以同时指定多个通配符
+            在接下来的使用中,用{数字}来引用第几个通配符
+        -->
+
+        <action name="*"
+                method="{1}">
+            <result name="success">/{1}.jsp</result>
+            <result name="error">/error.jsp</result>
+            <allowed-methods>login,register,error,hello</allowed-methods>
+        </action>
+    </package>
+
+    <package name="user" extends="struts-default" namespace="/user">
+
+        <!--全局结果集-->
+        <global-results>
+            <result name="error">/error.jsp</result>
+        </global-results>
+
+        <action name="add"
+                class="com.lanou.action.UserAction"
+                method="add">
+            <result name="add">/success.jsp</result>
+        </action>
+
+        <action name="delete"
+                class="com.lanou.action.UserAction"
+                method="delete">
+            <result name="delete">/success.jsp</result>
+        </action>
+    </package>
+
+    <package name="custom"
+             extends="struts-default"
+             namespace="/custom">
+        <action name="read"
+                class="com.lanou.action.CustomAction"
+                method="custom">
+            <!--
+                type:属性,可以设置action的类型
+                dispatcher:默认值,转发到某个页面
+                chain:转发到某个action
+                    如果某个action所在的包没有指定namespace,
+                    那么可以直接填写该action的name
+                    如果存在namespace,那么需要在result内部新增param标签
+                    来指定namespace和action
+            -->
+            <!--默认转发-->
+            <!--<result type="dispatcher">/success.jsp</result>-->
+
+            <!--chain 转发到action方法-->
+            <!--<result name="success" type="chain">/user/add-->
+                <!--<param name="namespace">/user</param>-->
+                <!--<param name="actionName">add</param>-->
+            <!--</result>-->
+
+            <!-- redirectAction 重定向到action方法 -->
+            <!--<result name="success" type="redirectAction">-->
+                <!--<param name="namespace">/user</param>-->
+                <!--<param name="actionName">add</param>-->
+            <!--</result>-->
+
+            <!--redirect 重定向到action方法-->
+            <result name="success" type="redirect">
+                /user/add.action
+            </result>
+        </action>
+
+
+        <action name="say"
+                class="com.lanou.action.CustomAction"
+                method="custom">
+            <result name="success" type="redirect">success.jsp</result>
+        </action>
+
+    </package>
+</struts>
